@@ -1,6 +1,6 @@
 import { findLinkClosingParen } from "./link-paren.js";
 import { parseDirectiveDestination } from "./parse-attrs.js";
-import type { ImdSegment, ImdWidget, ParseImdOptions } from "./types.js";
+import type { ItMarkdownSegment, ItMarkdownWidget, ParseItMarkdownOptions } from "./types.js";
 
 function findClosingLabelBracket(s: string, from: number): number {
   for (let i = from; i < s.length; i++) {
@@ -15,7 +15,7 @@ function toNum(v: string | undefined, fallback: number): number {
   return Number.isFinite(n) ? n : fallback;
 }
 
-function buildWidgetFromLink(label: string, dest: string): ImdWidget | null {
+function buildWidgetFromLink(label: string, dest: string): ItMarkdownWidget | null {
   const d = parseDirectiveDestination(dest);
   if (!d) return null;
   const { subtype, attrs } = d;
@@ -27,7 +27,7 @@ function buildWidgetFromLink(label: string, dest: string): ImdWidget | null {
         kind: "button",
         label,
         id,
-        onClickRaw: attrs.onclick,
+        onClickRaw: attrs.onclick || attrs.action,
         attrs,
       };
     case "slider":
@@ -56,8 +56,8 @@ function buildWidgetFromLink(label: string, dest: string): ImdWidget | null {
 }
 
 /** Split a markdown fragment for `[label](!type:...)` link-style widgets. */
-export function splitMarkdownForInlineWidgets(text: string): ImdSegment[] {
-  const segments: ImdSegment[] = [];
+export function splitMarkdownForInlineWidgets(text: string): ItMarkdownSegment[] {
+  const segments: ItMarkdownSegment[] = [];
   let pos = 0;
 
   while (pos < text.length) {
@@ -106,8 +106,8 @@ export function splitMarkdownForInlineWidgets(text: string): ImdSegment[] {
   return mergeAdjacentMarkdown(segments);
 }
 
-function mergeAdjacentMarkdown(segments: ImdSegment[]): ImdSegment[] {
-  const out: ImdSegment[] = [];
+function mergeAdjacentMarkdown(segments: ItMarkdownSegment[]): ItMarkdownSegment[] {
+  const out: ItMarkdownSegment[] = [];
   for (const seg of segments) {
     const last = out[out.length - 1];
     if (seg.type === "markdown" && last?.type === "markdown") {
@@ -119,7 +119,7 @@ function mergeAdjacentMarkdown(segments: ImdSegment[]): ImdSegment[] {
   return out;
 }
 
-function flushBuffer(buf: string[], target: ImdSegment[]): void {
+function flushBuffer(buf: string[], target: ItMarkdownSegment[]): void {
   if (buf.length === 0) return;
   const text = buf.join("\n");
   buf.length = 0;
@@ -127,13 +127,13 @@ function flushBuffer(buf: string[], target: ImdSegment[]): void {
 }
 
 /**
- * Parse an iMD document into ordered segments (Markdown fragments and widgets).
+ * Parse a Markdown document with optional interactive extensions into ordered segments.
  * Standard Markdown passes through as `markdown` segments; extensions are extracted.
  */
-export function parseImd(source: string, _options?: ParseImdOptions): ImdSegment[] {
+export function parseItMarkdown(source: string, _options?: ParseItMarkdownOptions): ItMarkdownSegment[] {
   void _options;
   const lines = source.split(/\r?\n/);
-  const segments: ImdSegment[] = [];
+  const segments: ItMarkdownSegment[] = [];
   const buf: string[] = [];
   let i = 0;
 
