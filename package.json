@@ -1,7 +1,7 @@
 {
   "name": "it-markdown",
-  "version": "0.1.0",
-  "description": "iMD (Interactive Markdown) — Markdown-first authoring with minimal interactive extensions and safe rendering.",
+  "version": "0.2.0",
+  "description": "Optional interactive extensions for Markdown — safe HTML rendering with marked.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -23,7 +23,7 @@
   "keywords": [
     "markdown",
     "interactive",
-    "imd",
+    "commonmark",
     "ai",
     "documentation"
   ],

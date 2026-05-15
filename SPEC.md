@@ -1,6 +1,6 @@
-# iMD (Interactive Markdown) specification
+# it-markdown — Markdown interactive extensions
 
-This repository implements **iMD**, a Markdown-first format with minimal extensions for common interactive controls, designed for AI-assisted authoring, readable diffs, and safe rendering.
+This repository specifies and implements **small, in-band extensions to CommonMark-compatible Markdown** for common interactive controls (buttons, sliders, choice groups, tabs, collapses). It is not a separate document format: sources stay ordinary `.md` files; unknown destinations remain valid Markdown links in generic previews.
 
 ## Goals
 
@@ -11,7 +11,11 @@ This repository implements **iMD**, a Markdown-first format with minimal extensi
 
 ## Backward compatibility
 
-Any CommonMark-compatible Markdown remains valid. Non-iMD renderers ignore unknown link destinations and show block directives as plain text until a dedicated renderer is used.
+Any CommonMark-compatible Markdown remains valid. Generic Markdown renderers ignore unknown link destinations and show block directives as plain text until a renderer that understands these extensions is used.
+
+## Filenames and ecosystem fit
+
+**Canonical sources use normal Markdown filenames** (typically `.md`, sometimes `.markdown`). Optional `!…` syntax is an **in-band extension** of that Markdown so Git, code review, and editor tooling behave as they already do for Markdown repositories.
 
 ## Link-style controls
 
@@ -23,9 +27,10 @@ Supported `type` values:
 
 ```
 [label](!button:onClick=alert("Hello"))
+[label](!button:action=alert("Hello"))
 ```
 
-The reference renderer does **not** wire `onClick` as executable JavaScript when `safeMode` is enabled (default). Instead it exposes the raw handler string via `data-imd-unsafe-handler` for auditing and for a future sandboxed runtime.
+The reference renderer does **not** wire `onClick` as executable JavaScript when `safeMode` is enabled (default). It exposes the raw handler string via `data-itm-unsafe-handler` for auditing and for a future sandboxed runtime. If both `onClick` and `action` appear (after key normalization), `onclick` wins.
 
 ### `slider`
 
@@ -61,7 +66,7 @@ First panel body (Markdown)
 Second panel body
 ```
 
-Consecutive tab blocks are rendered as a single tab group.
+Consecutive tab blocks are rendered as a single tab group unless `renderItMarkdownToHtml(…, { groupTabs: false })` is set.
 
 ### Collapse
 
@@ -74,18 +79,20 @@ Body runs until the next line that begins with `[!` (after optional whitespace).
 
 ## HTML output contract
 
-- Root wrapper: `<article class="imd-root" data-imd="1">…</article>` (class overridable).
-- Controls expose `data-imd-control` with values `button`, `slider`, `radio`, `checkbox`, `tabs`, `collapse`.
+- Root wrapper: `<article class="itm-root" data-itm="1">…</article>` (class overridable via `className`).
+- Controls expose `data-itm-control` with values `button`, `slider`, `radio`, `checkbox`, `tabs`, `collapse`.
 - `staticOnly: true` renders non-interactive fallbacks for environments without JavaScript.
 
-## Roadmap (from the design doc)
+The `itm-` prefix and `data-itm-*` attributes are the **HTML hook namespace** for this library (`it-markdown`), not a separate file type.
+
+## Roadmap (summary)
 
 **Phase 1 (this repo):** parser + safe HTML fragment renderer + tests.
 
-**Phase 2:** optional client runtime (tab switching without native `<details>` gaps, export-to-AI bridge), editor integrations.
+**Phase 2:** optional client runtime, editor integrations.
 
 **Phase 3:** hosted playground, richer component vocabulary, export pipelines.
 
 ## References
 
-The original motivation document in this initiative contrasts Markdown token efficiency and diff clarity with HTML’s layout and interactivity affordances, and argues for a bounded extension layer rather than unconstrained HTML in long-lived repositories.
+Markdown token efficiency and diff clarity matter for long-lived repositories; these extensions stay deliberately bounded compared to unconstrained HTML or executable JSX in documentation sources.

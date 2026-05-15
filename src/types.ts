@@ -1,12 +1,12 @@
-/** Parsed iMD widget (extension block or link-style control). */
-export type ImdWidget =
+/** Parsed interactive widget (extension block or link-style control). */
+export type ItMarkdownWidget =
   | {
       kind: "button";
       label: string;
       id?: string;
       /** Declared handler from source (may be unsafe; see render options). */
       onClickRaw?: string;
-      /** Normalized action=value pairs when using safe attribute grammar. */
+      /** Normalized key=value pairs from the link destination. */
       attrs: Record<string, string>;
     }
   | {
@@ -35,19 +35,19 @@ export type ImdWidget =
   | { kind: "tab"; title: string; body: string }
   | { kind: "collapse"; title: string; body: string };
 
-export type ImdSegment =
+export type ItMarkdownSegment =
   | { type: "markdown"; value: string }
-  | { type: "widget"; widget: ImdWidget };
+  | { type: "widget"; widget: ItMarkdownWidget };
 
-export type ParseImdOptions = {
-  /**
-   * When true (default), consecutive tab widgets are grouped for rendering.
-   * Parsing always emits one widget per `[!tab:]` block.
-   */
-  groupTabs?: boolean;
-};
+/** Reserved for future parse-time options (none yet). */
+export type ParseItMarkdownOptions = Record<string, never>;
 
 export type RenderHtmlOptions = {
+  /**
+   * When true (default), consecutive `tab` widgets render as one tab group.
+   * When false, each `[!tab:]` block is a separate tab control.
+   */
+  groupTabs?: boolean;
   /** When true (default), strip arbitrary JS from button handlers. */
   safeMode?: boolean;
   /** Optional root class on the wrapper. */

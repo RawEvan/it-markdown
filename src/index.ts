@@ -1,4 +1,4 @@
-export type { ImdSegment, ImdWidget, ParseImdOptions, RenderHtmlOptions } from "./types.js";
+export type { ItMarkdownSegment, ItMarkdownWidget, ParseItMarkdownOptions, RenderHtmlOptions } from "./types.js";
 export { parseAttrString, parseDirectiveDestination } from "./parse-attrs.js";
-export { parseImd, splitMarkdownForInlineWidgets } from "./parse.js";
-export { renderImdToHtml } from "./render.js";
+export { parseItMarkdown, splitMarkdownForInlineWidgets } from "./parse.js";
+export { renderItMarkdownToHtml } from "./render.js";
