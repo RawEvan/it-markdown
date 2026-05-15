@@ -17,9 +17,27 @@ import path from "node:path";
 import fs from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
+
+const require = createRequire(import.meta.url);
+
+/**
+ * Resolve the it-markdown module path, supporting both local dev and global install.
+ */
+function resolveItMarkdownPath() {
+  const localPath = path.resolve(rootDir, "..");
+  if (existsSync(path.resolve(localPath, "src", "index.ts"))) {
+    return localPath;
+  }
+  try {
+    return path.dirname(require.resolve("it-markdown/package.json"));
+  } catch {
+    return null;
+  }
+}
 
 function parseArgs(argv) {
   const args = { port: 0, file: null, help: false };
@@ -54,10 +72,12 @@ Examples:
 `);
 }
 
-// Check if it-markdown is built
+/**
+ * Check if it-markdown module is available.
+ */
 function checkDependencies() {
-  const distPath = path.resolve(rootDir, "..", "dist", "index.js");
-  if (!existsSync(distPath)) {
+  const itMdPath = resolveItMarkdownPath();
+  if (!itMdPath) {
     console.error("❌ it-markdown module not found. Please run 'npm run build' first.");
     return false;
   }
@@ -70,8 +90,13 @@ async function resolveFilePath(inputPath) {
   return path.resolve(process.cwd(), inputPath);
 }
 
+/**
+ * Start the Vite dev server with API endpoints.
+ */
 async function startServer(args) {
   console.log("🚀 Starting it-md-notepad...\n");
+
+  const itMdPath = resolveItMarkdownPath();
 
   const server = await createServer({
     root: rootDir,
@@ -81,7 +106,7 @@ async function startServer(args) {
     },
     resolve: {
       alias: {
-        "it-markdown": path.resolve(rootDir, ".."),
+        "it-markdown": itMdPath || "it-markdown",
       },
     },
     plugins: [
@@ -176,7 +201,19 @@ if (!checkDependencies()) {
   process.exit(1);
 }
 
-startServer(args).catch((err) => {
-  console.error("❌ Failed to start server:", err.message);
+// Startup timeout: fail if server doesn't start within 30 seconds
+const STARTUP_TIMEOUT = 30000;
+const startupTimer = setTimeout(() => {
+  console.error("❌ Server startup timed out after 30 seconds.");
   process.exit(1);
-});
+}, STARTUP_TIMEOUT);
+
+startServer(args)
+  .then(() => {
+    clearTimeout(startupTimer);
+  })
+  .catch((err) => {
+    clearTimeout(startupTimer);
+    console.error("❌ Failed to start server:", err.message);
+    process.exit(1);
+  });

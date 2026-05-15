@@ -34,7 +34,7 @@
     "test:watch": "vitest",
     "gen-fixtures": "npm run build && node scripts/gen-fixtures.mjs",
     "seed-fixtures": "node scripts/seed-bulk-fixtures.mjs",
-    "postinstall": "cd it-md-notepad && npm install"
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "markdown",

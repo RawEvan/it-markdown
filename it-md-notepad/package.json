@@ -12,9 +12,8 @@
     "start": "node bin/it-md-notepad.mjs"
   },
   "dependencies": {
-    "marked": "^15.0.12"
-  },
-  "devDependencies": {
+    "it-markdown": "file:..",
+    "marked": "^15.0.12",
     "vite": "^6.3.5"
   }
 }

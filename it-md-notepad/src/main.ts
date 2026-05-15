@@ -13,7 +13,15 @@ const btnViewEdit = document.querySelector<HTMLButtonElement>("#view-edit")!;
 
 let currentFilePath: string | null = null;
 let dirty = false;
+let autoSaveInterval: number | null = null;
 
+const AUTOSAVE_KEY = "it-md-notepad:draft";
+const AUTOSAVE_INTERVAL = 5000;
+const MAX_FILE_SIZE = 1024 * 1024; // 1MB threshold for large file warning
+
+/**
+ * Show status message with optional timeout.
+ */
 function setStatus(msg: string, timeout = 3000) {
   statusEl.textContent = msg;
   if (timeout > 0) {
@@ -23,6 +31,9 @@ function setStatus(msg: string, timeout = 3000) {
   }
 }
 
+/**
+ * Switch between preview, edit, and split view modes.
+ */
 function setView(mode: "preview" | "edit" | "split") {
   mainEl.className = `main mode-${mode}`;
   [btnViewPreview, btnViewEdit, btnViewSplit].forEach((b) => b.classList.remove("active"));
@@ -31,13 +42,9 @@ function setView(mode: "preview" | "edit" | "split") {
   if (mode === "split") btnViewSplit.classList.add("active");
 }
 
-function render() {
-  preview.innerHTML = renderImdToHtml(ta.value, { safeMode: true, staticOnly: false });
-  attachInteractiveBehaviors();
-  dirty = true;
-  setStatus("Modified", 0);
-}
-
+/**
+ * Attach interactive behaviors to rendered widgets.
+ */
 function attachInteractiveBehaviors() {
   preview.querySelectorAll('.imd-tabs').forEach(tabGroup => {
     const tabs = tabGroup.querySelectorAll<HTMLButtonElement>('.imd-tab');
@@ -70,27 +77,59 @@ function attachInteractiveBehaviors() {
   });
 }
 
+/**
+ * Render markdown content to preview panel.
+ */
+function renderImd() {
+  try {
+    preview.innerHTML = renderImdToHtml(ta.value, { safeMode: true, staticOnly: false });
+    attachInteractiveBehaviors();
+  } catch (err) {
+    setStatus(`Render error: ${err}`, 5000);
+    console.error("Render error:", err);
+  }
+}
+
+/**
+ * Load file from server with error handling.
+ */
 async function loadFile(path: string) {
   try {
+    setStatus("Loading...", 0);
     const res = await fetch(`/api/file?path=${encodeURIComponent(path)}`);
     if (!res.ok) throw new Error(await res.text());
     const content = await res.text();
+
+    if (content.length > MAX_FILE_SIZE) {
+      const proceed = confirm(`File is ${(content.length / 1024 / 1024).toFixed(1)}MB. Large files may affect performance. Continue?`);
+      if (!proceed) {
+        setStatus("Load cancelled", 3000);
+        return;
+      }
+    }
+
     ta.value = content;
     currentFilePath = path;
     dirty = false;
     setStatus(`Loaded: ${path}`);
     renderImd();
+    clearDraft();
   } catch (err) {
-    setStatus(`Error: ${err}`);
+    setStatus(`Error: ${err}`, 5000);
+    console.error("Load error:", err);
   }
 }
 
+/**
+ * Save file to server with error handling.
+ */
 async function saveFile() {
   if (!currentFilePath) {
     setStatus("No file path. Use Save As...", 3000);
     return;
   }
   try {
+    setStatus("Saving...", 0);
     const res = await fetch(`/api/file`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -99,11 +138,16 @@ async function saveFile() {
     if (!res.ok) throw new Error(await res.text());
     dirty = false;
     setStatus(`Saved: ${currentFilePath}`);
+    clearDraft();
   } catch (err) {
-    setStatus(`Error: ${err}`);
+    setStatus(`Save error: ${err}`, 5000);
+    console.error("Save error:", err);
   }
 }
 
+/**
+ * Save file with a new path.
+ */
 async function saveFileAs() {
   const path = prompt("Enter file path to save:");
   if (!path) return;
@@ -111,11 +155,94 @@ async function saveFileAs() {
   await saveFile();
 }
 
-function renderImd() {
-  preview.innerHTML = renderImdToHtml(ta.value, { safeMode: true, staticOnly: false });
-  attachInteractiveBehaviors();
+/**
+ * Auto-save draft to localStorage for crash recovery.
+ */
+function saveDraft() {
+  if (!dirty || !ta.value) return;
+  const draft = {
+    path: currentFilePath,
+    content: ta.value,
+    timestamp: Date.now(),
+  };
+  try {
+    localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(draft));
+  } catch {
+    // localStorage may be full or unavailable
+  }
 }
 
+/**
+ * Load draft from localStorage on startup.
+ */
+function loadDraft(): boolean {
+  try {
+    const raw = localStorage.getItem(AUTOSAVE_KEY);
+    if (!raw) return false;
+    const draft = JSON.parse(raw);
+    if (!draft.content) return false;
+
+    const age = Date.now() - (draft.timestamp || 0);
+    const ageMinutes = Math.floor(age / 60000);
+
+    if (draft.path) {
+      const restore = confirm(
+        `Found unsaved draft for "${draft.path}" (${ageMinutes}m ago). Restore it?`
+      );
+      if (restore) {
+        ta.value = draft.content;
+        currentFilePath = draft.path;
+        dirty = true;
+        setStatus("Restored from draft", 3000);
+        renderImd();
+        return true;
+      }
+    } else {
+      const restore = confirm(`Found unsaved draft (${ageMinutes}m ago). Restore it?`);
+      if (restore) {
+        ta.value = draft.content;
+        dirty = true;
+        setStatus("Restored from draft", 3000);
+        renderImd();
+        return true;
+      }
+    }
+  } catch {
+    // Ignore localStorage errors
+  }
+  return false;
+}
+
+/**
+ * Clear draft from localStorage after successful save.
+ */
+function clearDraft() {
+  try {
+    localStorage.removeItem(AUTOSAVE_KEY);
+  } catch {
+    // Ignore
+  }
+}
+
+/**
+ * Start auto-save interval.
+ */
+function startAutoSave() {
+  if (autoSaveInterval) return;
+  autoSaveInterval = window.setInterval(saveDraft, AUTOSAVE_INTERVAL);
+}
+
+/**
+ * Stop auto-save interval.
+ */
+function stopAutoSave() {
+  if (autoSaveInterval) {
+    clearInterval(autoSaveInterval);
+    autoSaveInterval = null;
+  }
+}
+
+// Event listeners
 btnOpen.addEventListener("click", () => {
   const path = prompt("Enter file path to open:");
   if (path) loadFile(path);
@@ -134,13 +261,33 @@ ta.addEventListener("input", () => {
   setStatus("Modified", 0);
 });
 
-// Load from query param
+// Keyboard shortcuts
+document.addEventListener("keydown", (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key === "s") {
+    e.preventDefault();
+    saveFile();
+  }
+});
+
+// Warn before closing if there are unsaved changes
+window.addEventListener("beforeunload", (e) => {
+  if (dirty) {
+    e.preventDefault();
+    e.returnValue = "";
+  }
+});
+
+// Initialize
+startAutoSave();
+
+// Load from query param or draft
 const params = new URLSearchParams(location.search);
 const fileParam = params.get("file");
+
 if (fileParam) {
   loadFile(fileParam);
-} else {
-  // Default sample
+} else if (!loadDraft()) {
+  // Default sample content
   ta.value = `# Welcome to it-md-notepad
 
 Edit this markdown on the left and see the interactive preview on the right.
