@@ -21,4 +21,9 @@ describe("renderImdToHtml", () => {
     expect(html).toContain('data-imd-control="tabs"');
     expect(html.match(/imd-tab-panel/g)?.length).toBe(2);
   });
+
+  it("can render consecutive tabs as separate groups when groupTabs is false", () => {
+    const html = renderImdToHtml(`[!tab:A]\na\n[!tab:B]\nb`, { groupTabs: false });
+    expect(html.match(/data-imd-control="tabs"/g)?.length).toBe(2);
+  });
 });

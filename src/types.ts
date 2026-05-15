@@ -39,15 +39,15 @@ export type ImdSegment =
   | { type: "markdown"; value: string }
   | { type: "widget"; widget: ImdWidget };
 
-export type ParseImdOptions = {
-  /**
-   * When true (default), consecutive tab widgets are grouped for rendering.
-   * Parsing always emits one widget per `[!tab:]` block.
-   */
-  groupTabs?: boolean;
-};
+/** Reserved for future parse-time flags (parsing always emits one `[!tab:]` widget per block). */
+export type ParseImdOptions = Record<string, never>;
 
 export type RenderHtmlOptions = {
+  /**
+   * When true (default), consecutive `tab` widgets render as one tab group.
+   * When false, each `[!tab:]` block is a separate tab control (useful for multiple groups in one doc).
+   */
+  groupTabs?: boolean;
   /** When true (default), strip arbitrary JS from button handlers. */
   safeMode?: boolean;
   /** Optional root class on the wrapper. */

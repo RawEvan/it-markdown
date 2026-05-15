@@ -15,6 +15,15 @@ describe("parseImd", () => {
     }
   });
 
+  it("accepts action= as an alias for the button handler", () => {
+    const segs = parseImd(`[Go](!button:action=alert(1))\n`);
+    const w = segs.find((s) => s.type === "widget" && s.widget.kind === "button");
+    expect(w?.type).toBe("widget");
+    if (w?.type === "widget" && w.widget.kind === "button") {
+      expect(w.widget.onClickRaw).toBe("alert(1)");
+    }
+  });
+
   it("parses tabs and collapses as blocks", () => {
     const src = `[!tab:标题1]\nLine A\n\n[!tab:标题2]\nLine B\n\n[!collapse:更多]\nHidden\n`;
     const segs = parseImd(src);
