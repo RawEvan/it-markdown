@@ -13,6 +13,12 @@ This repository implements **iMD**, a Markdown-first format with minimal extensi
 
 Any CommonMark-compatible Markdown remains valid. Non-iMD renderers ignore unknown link destinations and show block directives as plain text until a dedicated renderer is used.
 
+## Filenames and ecosystem fit
+
+**Canonical sources use normal Markdown filenames** (typically `.md`, sometimes `.markdown`). There is no separate “iMD file extension” in this initiative: a document is still Markdown on disk and in version control; optional `!…` syntax is an **in-band extension** of that Markdown.
+
+Using `.md` keeps diffs, code review, GitHub/GitLab previews, zip exports, and LLM tooling aligned with how the industry already treats documentation. Parsers, VS Code extensions, and CI actions should key off content (and optional front matter or config), not a bespoke suffix—so the same path toward **standardization** (e.g. CommonMark extension proposals) stays credible.
+
 ## Link-style controls
 
 Syntax: `[label](!type:key=value,key2=value2)`
