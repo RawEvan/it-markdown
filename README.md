@@ -2,6 +2,8 @@
 
 **iMD (Interactive Markdown)** is Markdown-first content with a small set of extensions for buttons, sliders, choice groups, tabs, and collapses—aimed at AI-era documentation where humans need richer structure and light interactivity without giving up diff-friendly text.
 
+**iMD is not a separate file type.** Authors use ordinary **`.md`** (or `.markdown`) sources—the same filenames Git hosts, editors open, and CommonMark/GFM tooling already understands. The name *iMD* refers to this optional extension vocabulary and renderers that understand it, not to a dedicated `.imd` suffix.
+
 This repository hosts the **reference TypeScript implementation**: a parser, a safe HTML renderer (using [`marked`](https://github.com/markedjs/marked) for standard Markdown), and tests. See [`SPEC.md`](./SPEC.md) for the grammar and rendering contract.
 
 ## Quick start
@@ -16,7 +18,7 @@ npm run build
 import { readFileSync } from "node:fs";
 import { renderImdToHtml } from "it-markdown";
 
-const src = readFileSync(new URL("./examples/sample.imd.md", import.meta.url), "utf8");
+const src = readFileSync(new URL("./examples/sample.md", import.meta.url), "utf8");
 const html = renderImdToHtml(src, { staticOnly: false, safeMode: true });
 console.log(html);
 ```
@@ -29,7 +31,7 @@ console.log(html);
 
 ## Example
 
-See [`examples/sample.imd.md`](./examples/sample.imd.md).
+See [`examples/sample.md`](./examples/sample.md).
 
 ## License
 
