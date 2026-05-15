@@ -1,0 +1,19 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "button",
+      "label": "B7",
+      "id": "id7",
+      "onClickRaw": "f_7(7)",
+      "attrs": {
+        "onclick": "f_7(7)",
+        "id": "id7"
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  }
+]

@@ -1,0 +1,27 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "slider",
+      "label": "x",
+      "min": 0,
+      "max": 100,
+      "value": 3,
+      "attrs": {
+        "value": "3"
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  },
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "collapse",
+      "title": "C",
+      "body": "c"
+    }
+  }
+]

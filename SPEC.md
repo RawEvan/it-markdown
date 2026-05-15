@@ -2,14 +2,15 @@
 
 This repository implements **iMD**, a Markdown-first format with minimal extensions for common interactive controls, designed for AI-assisted authoring, readable diffs, and safe rendering.
 
-> **Spec-Version:** `0.2` — Extension grammar and default safe HTML output are defined in this document and **frozen by the conformance corpus** in [`fixtures/cases/`](./fixtures/cases/) (`expected.segments.json`, `expected.safe.html`). Implementations that pass the corpus tests in this repository are compatible with this spec revision.
+> **Spec-Version:** `0.2` — Extension grammar and default safe HTML output are defined in this document and **frozen by the conformance corpus** in [`fixtures/cases/`](./fixtures/cases/) (`expected.segments.json`, `expected.safe.html`, `expected.static.html`). Implementations that pass the corpus tests in this repository are compatible with this spec revision.
 
 ### Version map (npm ↔ spec)
 
 | npm version | Spec-Version | Conformance |
 |-------------|--------------|-------------|
 | `0.1.0`     | _(unversioned)_ | none shipped |
-| `0.1.1`+    | `0.2`        | required in CI |
+| `0.1.1`     | `0.2`        | segments + safe HTML |
+| `0.2.0`+    | `0.2`        | segments + safe + **static** HTML |
 
 **SemVer:** exported TypeScript API follows semantic versioning. **Spec-Version** increments when grammar, segment JSON shape, or default safe HTML contract changes incompatibly for other implementations.
 

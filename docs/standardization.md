@@ -18,9 +18,9 @@ Reasonable venues over time (subject to community norms):
 
 1. **Problem statement**: bounded interactive documentation in Markdown without arbitrary JSX.
 2. **Syntax**: normative grammar for link and block extensions (mirror `SPEC.md` + fixtures).
-3. **HTML mapping**: default safe attributes (`data-imd-*` today; subject to rename if the project adopts a neutral hook namespace).
-4. **Security model**: no execution in reference render; optional client runtime contract.
-5. **Interoperability**: fallback behaviour in non-supporting renderers; file suffix remains `.md`.
+3. **HTML mapping**: default safe attributes (`data-imd-*` in the reference renderer; see [`security-model.md`](./security-model.md)).
+4. **Security model**: no execution in reference render; optional client runtime contract ([`security-model.md`](./security-model.md)).
+5. **Interoperability**: fallback behaviour in non-supporting renderers; file suffix remains `.md`. New controls follow [`extension-process.md`](./extension-process.md).
 
 Replace this outline with a link to an external draft when one exists.
 

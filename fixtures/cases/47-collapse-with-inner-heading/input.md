@@ -1,0 +1,4 @@
+[!collapse:H]
+### Inner
+
+text

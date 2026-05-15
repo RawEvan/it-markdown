@@ -1,0 +1,21 @@
+[
+  {
+    "type": "markdown",
+    "value": "> "
+  },
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "button",
+      "label": "q",
+      "onClickRaw": "q()",
+      "attrs": {
+        "onclick": "q()"
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  }
+]

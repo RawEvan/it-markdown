@@ -1,0 +1,10 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "tab",
+      "title": "L",
+      "body": "- one\n- two"
+    }
+  }
+]

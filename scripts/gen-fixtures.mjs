@@ -1,6 +1,6 @@
 /**
- * Regenerate expected.segments.json and expected.safe.html for every fixture
- * under fixtures/cases (each subfolder with input.md). Run `npm run build` first.
+ * Regenerate expected.segments.json, expected.safe.html, and expected.static.html
+ * for every fixture under fixtures/cases (each subfolder with input.md). Run `npm run build` first.
  */
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -28,8 +28,10 @@ for (const name of dirs) {
     continue;
   }
   const segments = parseImd(input);
-  const html = renderImdToHtml(input, { safeMode: true, staticOnly: false });
+  const htmlSafe = renderImdToHtml(input, { safeMode: true, staticOnly: false });
+  const htmlStatic = renderImdToHtml(input, { safeMode: true, staticOnly: true });
   writeFileSync(join(dir, "expected.segments.json"), `${JSON.stringify(segments, null, 2)}\n`, "utf8");
-  writeFileSync(join(dir, "expected.safe.html"), `${normNl(html).trimEnd()}\n`, "utf8");
+  writeFileSync(join(dir, "expected.safe.html"), `${normNl(htmlSafe).trimEnd()}\n`, "utf8");
+  writeFileSync(join(dir, "expected.static.html"), `${normNl(htmlStatic).trimEnd()}\n`, "utf8");
   console.log("wrote", name);
 }

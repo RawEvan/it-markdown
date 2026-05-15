@@ -1,0 +1,21 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "radio",
+      "label": "r",
+      "id": "r99",
+      "options": [
+        "Only"
+      ],
+      "attrs": {
+        "options": "Only",
+        "id": "r99"
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  }
+]

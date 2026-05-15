@@ -1,0 +1,14 @@
+[
+  {
+    "type": "markdown",
+    "value": "```"
+  },
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "tab",
+      "title": "fake",
+      "body": "```\n\n[real](!button:onClick=q())"
+    }
+  }
+]

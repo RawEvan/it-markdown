@@ -4,6 +4,23 @@ All notable changes to this project are documented in this file. The format is b
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-05-15
+
+### Added
+
+- **51 conformance fixtures** (`01`–`08` plus `09`–`51`) with `expected.static.html` for `staticOnly: true` rendering; `scripts/seed-bulk-fixtures.mjs` seeds bulk cases.
+- **CLI** `it-markdown` (`src/cli.ts`, `npm run build` → `dist/cli.js`) with optional `--static`.
+- **GitHub Actions**: `ci.yml` for test + build; reusable `render-markdown.yml` for HTML fragment output.
+- **Examples**: `examples/playground` (Vite), `examples/ssg-minimal` (plain Node build).
+- **Editor skeleton**: `editors/vscode-it-markdown` (Webview preview command).
+- **Docs**: `docs/github-actions.md`, `docs/security-model.md`, `docs/extension-process.md`; Chinese summary [`README.zh-CN.md`](./README.zh-CN.md).
+- **Issue templates** under `.github/ISSUE_TEMPLATE/`.
+- **micromark** devDependency and `src/micromark-compat.test.ts` for baseline CommonMark tokenizer notes.
+
+### Changed
+
+- **Spec-Version** remains `0.2` (grammar unchanged); corpus now includes static render expectations.
+
 ## [0.1.1] — 2026-05-15
 
 ### Added

@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security
+    url: https://github.com/RawEvan/it-markdown/security
+    about: Please follow SECURITY.md for vulnerability reports.

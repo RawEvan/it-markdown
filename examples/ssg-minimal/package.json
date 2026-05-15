@@ -1,0 +1,11 @@
+{
+  "name": "it-markdown-ssg-example",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "it-markdown": "file:../.."
+  }
+}

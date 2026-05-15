@@ -22,15 +22,18 @@ describe("conformance fixtures", () => {
     const inputPath = join(dir, "input.md");
     const segPath = join(dir, "expected.segments.json");
     const htmlPath = join(dir, "expected.safe.html");
-    if (!existsSync(inputPath) || !existsSync(segPath) || !existsSync(htmlPath)) continue;
+    const staticPath = join(dir, "expected.static.html");
+    if (!existsSync(inputPath) || !existsSync(segPath) || !existsSync(htmlPath) || !existsSync(staticPath)) continue;
 
     it(name, () => {
       const input = readFileSync(inputPath, "utf8");
       const expectedSeg = JSON.parse(readFileSync(segPath, "utf8")) as unknown;
       const expectedHtml = norm(readFileSync(htmlPath, "utf8"));
+      const expectedStatic = norm(readFileSync(staticPath, "utf8"));
 
       expect(parseImd(input)).toEqual(expectedSeg);
       expect(norm(renderImdToHtml(input, { safeMode: true, staticOnly: false }))).toBe(expectedHtml);
+      expect(norm(renderImdToHtml(input, { safeMode: true, staticOnly: true }))).toBe(expectedStatic);
     });
   }
 });

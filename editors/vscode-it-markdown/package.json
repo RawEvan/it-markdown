@@ -1,0 +1,30 @@
+{
+  "name": "vscode-it-markdown",
+  "displayName": "it-markdown",
+  "description": "Preview extended Markdown with it-markdown (safe HTML).",
+  "version": "0.0.1",
+  "publisher": "local-dev",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": ["onLanguage:markdown"],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "it-markdown.previewHtml",
+        "title": "Preview HTML (it-markdown)",
+        "category": "Markdown"
+      }
+    ]
+  },
+  "dependencies": {
+    "it-markdown": "file:../.."
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0"
+  }
+}
