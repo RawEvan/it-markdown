@@ -1,0 +1,32 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "button",
+      "label": "Dangerous",
+      "onClickRaw": "'eval(\"alert(1)\")'",
+      "attrs": {
+        "onclick": "'eval(\"alert(1)\")'"
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  },
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "button",
+      "label": "XSS Attempt",
+      "onClickRaw": "'javascript:alert(1)'",
+      "attrs": {
+        "onclick": "'javascript:alert(1)'"
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  }
+]

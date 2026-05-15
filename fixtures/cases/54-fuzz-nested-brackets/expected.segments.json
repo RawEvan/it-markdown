@@ -1,0 +1,6 @@
+[
+  {
+    "type": "markdown",
+    "value": "[Link [[with]] brackets](!button:id='test')\n[[!tab:test]]\n"
+  }
+]

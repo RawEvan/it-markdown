@@ -1,0 +1,49 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "button",
+      "label": "Unicode ✓",
+      "attrs": {
+        "label": "'✓™'"
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  },
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "button",
+      "label": "Newlines",
+      "onClickRaw": "'console.log(1)\\nconsole.log(2)'",
+      "attrs": {
+        "onclick": "'console.log(1)\\nconsole.log(2)'"
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  },
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "radio",
+      "label": "Quotes \" ' ` ",
+      "options": [
+        "'a \" b'"
+      ],
+      "attrs": {
+        "options": "'a \" b'",
+        "'c'": ""
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  }
+]

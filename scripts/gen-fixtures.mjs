@@ -1,6 +1,8 @@
 /**
  * Regenerate expected.segments.json, expected.safe.html, and expected.static.html
  * for every fixture under fixtures/cases (each subfolder with input.md). Run `npm run build` first.
+ * Also generates expected.unsafe.html (safeMode: false) and expected.ungrouped.html (groupTabs: false)
+ * if the case name contains "unsafe" or "ungrouped" respectively.
  */
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -33,5 +35,18 @@ for (const name of dirs) {
   writeFileSync(join(dir, "expected.segments.json"), `${JSON.stringify(segments, null, 2)}\n`, "utf8");
   writeFileSync(join(dir, "expected.safe.html"), `${normNl(htmlSafe).trimEnd()}\n`, "utf8");
   writeFileSync(join(dir, "expected.static.html"), `${normNl(htmlStatic).trimEnd()}\n`, "utf8");
+
+  // Generate unsafe mode output for cases with "unsafe" in name
+  if (name.toLowerCase().includes("unsafe")) {
+    const htmlUnsafe = renderImdToHtml(input, { safeMode: false, staticOnly: false });
+    writeFileSync(join(dir, "expected.unsafe.html"), `${normNl(htmlUnsafe).trimEnd()}\n`, "utf8");
+  }
+
+  // Generate ungrouped tabs output for cases with "ungroup" in name
+  if (name.toLowerCase().includes("ungroup") || name.toLowerCase().includes("tabs-ungrouped")) {
+    const htmlUngrouped = renderImdToHtml(input, { safeMode: true, staticOnly: false, groupTabs: false });
+    writeFileSync(join(dir, "expected.ungrouped.html"), `${normNl(htmlUngrouped).trimEnd()}\n`, "utf8");
+  }
+
   console.log("wrote", name);
 }

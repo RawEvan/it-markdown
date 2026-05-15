@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <rect width="256" height="256" fill="#1e1e1e" rx="32"/>
+  <text x="128" y="100" font-family="monospace" font-size="56" font-weight="bold" fill="#4fc1ff" text-anchor="middle">!MD</text>
+  <rect x="48" y="130" width="160" height="8" fill="#4fc1ff" rx="4"/>
+  <rect x="48" y="150" width="120" height="8" fill="#ce9178" rx="4"/>
+  <rect x="48" y="170" width="80" height="8" fill="#6a9955" rx="4"/>
+  <rect x="180" y="130" width="28" height="48" fill="#dcdcaa" rx="4"/>
+</svg>

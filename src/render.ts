@@ -160,6 +160,7 @@ function renderWidget(w: ImdWidget, opts: RenderHtmlOptions): string {
 function renderSegments(segments: ImdSegment[], opts: RenderHtmlOptions): string {
   const parts: string[] = [];
   let i = 0;
+  const groupTabs = opts.groupTabs !== false;
   while (i < segments.length) {
     const seg = segments[i];
     if (!seg) break;
@@ -168,7 +169,7 @@ function renderSegments(segments: ImdSegment[], opts: RenderHtmlOptions): string
       i++;
       continue;
     }
-    if (isTabWidget(seg)) {
+    if (groupTabs && isTabWidget(seg)) {
       const tabs: Extract<ImdWidget, { kind: "tab" }>[] = [];
       while (isTabWidget(segments[i])) {
         const t = segments[i];
@@ -176,6 +177,11 @@ function renderSegments(segments: ImdSegment[], opts: RenderHtmlOptions): string
         i++;
       }
       parts.push(renderTabGroup(tabs, opts));
+      continue;
+    }
+    if (isTabWidget(seg)) {
+      parts.push(renderTabGroup([seg.widget], opts));
+      i++;
       continue;
     }
     parts.push(renderWidget(seg.widget, opts));
@@ -189,7 +195,7 @@ function renderSegments(segments: ImdSegment[], opts: RenderHtmlOptions): string
  * Uses `marked` for Markdown segments; emits semantic controls with `data-imd-*` hooks for a future client runtime.
  */
 export function renderImdToHtml(source: string, options: RenderHtmlOptions = {}): string {
-  const segments = parseImd(source);
+  const segments = parseImd(source, { groupTabs: options.groupTabs });
   const className = options.className ?? "imd-root";
   const inner = renderSegments(segments, options);
   return `<article class="${esc(className)}" data-imd="1">${inner}</article>`;

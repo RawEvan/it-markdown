@@ -1,0 +1,43 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "button",
+      "label": "Empty",
+      "attrs": {}
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  },
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "button",
+      "label": "No value",
+      "id": "",
+      "attrs": {
+        "id": ""
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  },
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "button",
+      "label": "Only comma",
+      "attrs": {
+        "id,label": ""
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "name": "vitepress-it-markdown-example",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs"
+  },
+  "dependencies": {
+    "it-markdown": "file:../..",
+    "vitepress": "^1.0.0"
+  }
+}

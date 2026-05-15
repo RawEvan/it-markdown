@@ -1,0 +1,141 @@
+:root {
+  --itm-primary: #3b82f6;
+  --itm-border: #e5e7eb;
+  --itm-bg: #f9fafb;
+  --itm-text: #111827;
+}
+
+.dark {
+  --itm-border: #374151;
+  --itm-bg: #1f2937;
+  --itm-text: #f3f4f6;
+}
+
+.itm-widget {
+  margin: 1.5rem 0;
+}
+
+.itm-button {
+  padding: 0.5rem 1rem;
+  background: var(--itm-primary);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.itm-button:hover {
+  opacity: 0.9;
+}
+
+.itm-slider {
+  width: 100%;
+  height: 0.5rem;
+  border-radius: 0.25rem;
+  background: var(--itm-border);
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.itm-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: var(--itm-primary);
+  cursor: pointer;
+}
+
+.itm-radio-group,
+.itm-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+}
+
+.itm-radio-group label,
+.itm-checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.itm-tabs {
+  border: 1px solid var(--itm-border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.itm-tab-list {
+  display: flex;
+  border-bottom: 1px solid var(--itm-border);
+  background: var(--itm-bg);
+}
+
+.itm-tab {
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--itm-text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.itm-tab:hover {
+  background: var(--itm-border);
+}
+
+.itm-tab-active {
+  background: white;
+  border-bottom: 2px solid var(--itm-primary);
+}
+
+.dark .itm-tab-active {
+  background: var(--itm-bg);
+}
+
+.itm-tab-panel {
+  padding: 1.25rem;
+}
+
+.itm-collapse {
+  border: 1px solid var(--itm-border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.itm-collapse summary {
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  font-weight: 500;
+  background: var(--itm-bg);
+  list-style: none;
+}
+
+.itm-collapse summary::-webkit-details-marker {
+  display: none;
+}
+
+.itm-collapse summary::before {
+  content: "▶";
+  display: inline-block;
+  margin-right: 0.5rem;
+  transition: transform 0.2s;
+}
+
+.itm-collapse[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.itm-collapse div {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--itm-border);
+}

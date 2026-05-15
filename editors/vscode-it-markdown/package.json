@@ -1,30 +1,131 @@
 {
   "name": "vscode-it-markdown",
   "displayName": "it-markdown",
-  "description": "Preview extended Markdown with it-markdown (safe HTML).",
-  "version": "0.0.1",
-  "publisher": "local-dev",
-  "private": true,
+  "description": "Interactive Markdown extensions — preview and syntax highlighting for !button, !slider, !tab, !collapse.",
+  "version": "0.2.0",
+  "publisher": "it-markdown",
+  "private": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RawEvan/it-markdown.git",
+    "directory": "editors/vscode-it-markdown"
+  },
+  "homepage": "https://github.com/RawEvan/it-markdown",
+  "bugs": {
+    "url": "https://github.com/RawEvan/it-markdown/issues"
+  },
+  "keywords": [
+    "markdown",
+    "interactive",
+    "preview",
+    "widgets",
+    "button",
+    "slider",
+    "tabs"
+  ],
   "type": "module",
   "engines": {
     "vscode": "^1.85.0"
   },
-  "categories": ["Other"],
-  "activationEvents": ["onLanguage:markdown"],
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "icon": "assets/icon.png",
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
+  "activationEvents": [
+    "onLanguage:markdown"
+  ],
   "main": "./extension.js",
   "contributes": {
+    "languages": [
+      {
+        "id": "markdown",
+        "aliases": ["Markdown", "markdown"],
+        "extensions": [".md", ".markdown"]
+      }
+    ],
+    "grammars": [
+      {
+        "scopeName": "markdown.itmarkup.injection",
+        "path": "./syntaxes/injection.json",
+        "injectTo": ["text.html.markdown"],
+        "embeddedLanguages": {
+          "meta.embedded.block.frontmatter": "yaml"
+        }
+      }
+    ],
     "commands": [
       {
         "command": "it-markdown.previewHtml",
         "title": "Preview HTML (it-markdown)",
+        "category": "Markdown",
+        "icon": "$(open-preview)"
+      },
+      {
+        "command": "it-markdown.toggleStaticOnly",
+        "title": "Toggle Static Only Mode",
         "category": "Markdown"
       }
-    ]
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "it-markdown.previewHtml",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "it-markdown.toggleStaticOnly",
+          "when": "editorLangId == markdown"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "it-markdown.previewHtml",
+          "when": "editorLangId == markdown",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "it-markdown",
+      "properties": {
+        "itMarkdown.safeMode": {
+          "type": "boolean",
+          "default": true,
+          "description": "Render safe HTML only (sanitized). Disable at your own risk."
+        },
+        "itMarkdown.staticOnly": {
+          "type": "boolean",
+          "default": false,
+          "description": "Render static HTML without interactive scripts."
+        },
+        "itMarkdown.groupTabs": {
+          "type": "boolean",
+          "default": true,
+          "description": "Group consecutive [!tab:] blocks into a single tab control."
+        },
+        "itMarkdown.enableSyntaxHighlighting": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable syntax highlighting for !widget link destinations."
+        }
+      }
+    }
   },
   "dependencies": {
     "it-markdown": "file:../.."
   },
   "devDependencies": {
-    "@types/vscode": "^1.85.0"
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.24.0"
+  },
+  "scripts": {
+    "package": "vsce package --no-dependencies",
+    "publish": "vsce publish --no-dependencies"
   }
 }

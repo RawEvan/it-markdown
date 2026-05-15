@@ -1,0 +1,62 @@
+{
+  "scopeName": "markdown.itmarkup.injection",
+  "injectionSelector": "L:text.html.markdown",
+  "patterns": [
+    {
+      "name": "markup.link.itmarkup.control",
+      "begin": "\\]\\(!",
+      "end": "\\)",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.link.begin.markdown" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.link.end.markdown" }
+      },
+      "patterns": [
+        {
+          "name": "entity.name.type.itmarkup",
+          "match": "(button|slider|radio|checkbox|color)(?=:|,|\\))"
+        },
+        {
+          "name": "keyword.operator.itmarkup",
+          "match": ":"
+        },
+        {
+          "name": "punctuation.separator.itmarkup",
+          "match": ","
+        },
+        {
+          "name": "string.quoted.single.itmarkup",
+          "begin": "'",
+          "end": "'",
+          "patterns": [{ "name": "constant.character.escape.itmarkup", "match": "\\\\." }]
+        },
+        {
+          "name": "string.quoted.double.itmarkup",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [{ "name": "constant.character.escape.itmarkup", "match": "\\\\." }]
+        }
+      ]
+    },
+    {
+      "name": "markup.heading.itmarkup.block",
+      "begin": "^\\s*(\\[!)(tab|collapse)(:)",
+      "end": "\\]$",
+      "beginCaptures": {
+        "1": { "name": "punctuation.definition.block.begin.markdown" },
+        "2": { "name": "entity.name.type.itmarkup" },
+        "3": { "name": "keyword.operator.itmarkup" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.block.end.markdown" }
+      },
+      "patterns": [
+        {
+          "name": "string.unquoted.label.itmarkup",
+          "match": "[^\\]]+"
+        }
+      ]
+    }
+  ]
+}

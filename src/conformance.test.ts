@@ -23,6 +23,9 @@ describe("conformance fixtures", () => {
     const segPath = join(dir, "expected.segments.json");
     const htmlPath = join(dir, "expected.safe.html");
     const staticPath = join(dir, "expected.static.html");
+    const unsafePath = join(dir, "expected.unsafe.html");
+    const ungroupedPath = join(dir, "expected.ungrouped.html");
+
     if (!existsSync(inputPath) || !existsSync(segPath) || !existsSync(htmlPath) || !existsSync(staticPath)) continue;
 
     it(name, () => {
@@ -34,6 +37,16 @@ describe("conformance fixtures", () => {
       expect(parseImd(input)).toEqual(expectedSeg);
       expect(norm(renderImdToHtml(input, { safeMode: true, staticOnly: false }))).toBe(expectedHtml);
       expect(norm(renderImdToHtml(input, { safeMode: true, staticOnly: true }))).toBe(expectedStatic);
+
+      if (existsSync(unsafePath)) {
+        const expectedUnsafe = norm(readFileSync(unsafePath, "utf8"));
+        expect(norm(renderImdToHtml(input, { safeMode: false, staticOnly: false }))).toBe(expectedUnsafe);
+      }
+
+      if (existsSync(ungroupedPath)) {
+        const expectedUngrouped = norm(readFileSync(ungroupedPath, "utf8"));
+        expect(norm(renderImdToHtml(input, { safeMode: true, staticOnly: false, groupTabs: false }))).toBe(expectedUngrouped);
+      }
     });
   }
 });

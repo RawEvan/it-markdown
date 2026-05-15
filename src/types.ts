@@ -54,4 +54,6 @@ export type RenderHtmlOptions = {
   className?: string;
   /** When true, wrap interactive controls for no-JS environments (static labels only). */
   staticOnly?: boolean;
+  /** When true (default), consecutive tab blocks are grouped into a single tab control. */
+  groupTabs?: boolean;
 };
