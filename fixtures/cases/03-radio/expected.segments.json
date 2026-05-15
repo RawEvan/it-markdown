@@ -1,0 +1,22 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "radio",
+      "label": "Pick",
+      "id": "r1",
+      "options": [
+        "A",
+        "B"
+      ],
+      "attrs": {
+        "options": "A|B",
+        "id": "r1"
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  }
+]

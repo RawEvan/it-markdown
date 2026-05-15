@@ -1,0 +1,23 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "slider",
+      "label": "Level",
+      "id": "s1",
+      "min": 0,
+      "max": 10,
+      "value": 5,
+      "attrs": {
+        "min": "0",
+        "max": "10",
+        "value": "5",
+        "id": "s1"
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  }
+]

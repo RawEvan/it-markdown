@@ -1,0 +1,2 @@
+[!collapse:More]
+Hidden **body**
