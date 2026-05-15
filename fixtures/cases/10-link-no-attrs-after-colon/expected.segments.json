@@ -1,0 +1,14 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "button",
+      "label": "a",
+      "attrs": {}
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  }
+]

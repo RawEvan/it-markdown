@@ -1,7 +1,7 @@
 {
   "name": "it-markdown",
-  "version": "0.1.0",
-  "description": "iMD (Interactive Markdown) — Markdown-first authoring with minimal interactive extensions and safe rendering.",
+  "version": "0.2.0",
+  "description": "Small interactive extensions for Markdown — safe HTML rendering with marked.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -13,23 +13,37 @@
   },
   "files": [
     "dist",
-    "SPEC.md"
+    "SPEC.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "README.zh-CN.md",
+    "fixtures",
+    "schemas",
+    "docs"
   ],
+  "bin": {
+    "it-markdown": "./dist/cli.js"
+  },
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "gen-fixtures": "npm run build && node scripts/gen-fixtures.mjs",
+    "seed-fixtures": "node scripts/seed-bulk-fixtures.mjs"
   },
   "keywords": [
     "markdown",
     "interactive",
-    "imd",
+    "commonmark",
+    "conformance",
     "ai",
     "documentation"
   ],
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^22.15.21",
+    "micromark": "^4.0.2",
     "typescript": "^5.8.3",
     "vitest": "^3.1.4"
   },

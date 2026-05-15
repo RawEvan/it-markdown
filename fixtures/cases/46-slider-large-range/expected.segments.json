@@ -1,0 +1,23 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "slider",
+      "label": "L",
+      "id": "lr",
+      "min": 0,
+      "max": 999999,
+      "value": 500,
+      "attrs": {
+        "min": "0",
+        "max": "999999",
+        "value": "500",
+        "id": "lr"
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  }
+]

@@ -1,0 +1,10 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "tab",
+      "title": "One",
+      "body": "x\n\n[btn](!button:onClick=x())"
+    }
+  }
+]

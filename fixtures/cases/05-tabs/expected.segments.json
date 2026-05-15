@@ -1,0 +1,18 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "tab",
+      "title": "One",
+      "body": "First"
+    }
+  },
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "tab",
+      "title": "Two",
+      "body": "Second"
+    }
+  }
+]

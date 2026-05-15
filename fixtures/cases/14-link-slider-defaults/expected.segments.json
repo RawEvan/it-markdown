@@ -1,0 +1,17 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "slider",
+      "label": "s",
+      "min": 0,
+      "max": 100,
+      "value": 0,
+      "attrs": {}
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  }
+]

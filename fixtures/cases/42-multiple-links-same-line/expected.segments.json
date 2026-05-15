@@ -1,0 +1,30 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "button",
+      "label": "a",
+      "onClickRaw": "a()",
+      "attrs": {
+        "onclick": "a()"
+      }
+    }
+  },
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "slider",
+      "label": "b",
+      "min": 0,
+      "max": 100,
+      "value": 1,
+      "attrs": {
+        "value": "1"
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  }
+]

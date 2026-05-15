@@ -1,0 +1,21 @@
+[
+  {
+    "type": "markdown",
+    "value": "# H\n\n- a\n- "
+  },
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "button",
+      "label": "b",
+      "onClickRaw": "z()",
+      "attrs": {
+        "onclick": "z()"
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  }
+]

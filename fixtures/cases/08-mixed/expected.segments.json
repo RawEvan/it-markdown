@@ -1,0 +1,17 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "button",
+      "label": "H",
+      "onClickRaw": "foo()",
+      "attrs": {
+        "onclick": "foo()"
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n\nHello.\n"
+  }
+]

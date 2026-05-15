@@ -9,11 +9,13 @@
 | Install deps | `npm ci` (or `npm install`) |
 | Run tests | `npm test` |
 | Watch tests | `npm run test:watch` |
-| Build | `npm run build` |
+| Regenerate conformance expectations | `npm run gen-fixtures` |
+| Seed bulk fixture inputs (`09`–`51`) | `npm run seed-fixtures` |
+| CLI (after build) | `npx it-markdown <file.md>` |
 
 ### Key notes
 
-- The codebase lives on the `cursor/imd-bootstrap-8452` branch; `main` is currently a placeholder.
+- Default branch is `main`; feature work uses `cursor/<topic>-fd9d` style branches when applicable.
 - Node.js >= 20 is required (`engines.node` in `package.json`). CI uses Node 22.
 - Package manager is **npm** (lockfile: `package-lock.json`).
 - Build output goes to `dist/` via `tsc`. No bundler is used.

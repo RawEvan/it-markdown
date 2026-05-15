@@ -1,0 +1,18 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "collapse",
+      "title": "A",
+      "body": "a"
+    }
+  },
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "collapse",
+      "title": "B",
+      "body": "b"
+    }
+  }
+]

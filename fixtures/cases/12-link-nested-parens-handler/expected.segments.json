@@ -1,0 +1,17 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "button",
+      "label": "c",
+      "onClickRaw": "alert(\"a)\")",
+      "attrs": {
+        "onclick": "alert(\"a)\")"
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  }
+]

@@ -1,0 +1,31 @@
+name: Render Markdown (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      input_path:
+        description: Path to a .md file in the repository
+        required: true
+        type: string
+      output_path:
+        description: Where to write the HTML fragment
+        required: true
+        type: string
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm ci
+      - run: npm run build
+      - name: Render
+        env:
+          INPUT_MD: ${{ inputs.input_path }}
+          OUTPUT_HTML: ${{ inputs.output_path }}
+        run: |
+          node --input-type=module -e "import { readFileSync, writeFileSync } from 'node:fs'; import { renderImdToHtml } from './dist/index.js'; const md = readFileSync(process.env.INPUT_MD, 'utf8'); writeFileSync(process.env.OUTPUT_HTML, renderImdToHtml(md, { safeMode: true, staticOnly: false }), 'utf8');"

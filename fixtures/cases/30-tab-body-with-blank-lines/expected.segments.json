@@ -1,0 +1,18 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "tab",
+      "title": "A",
+      "body": "\nline"
+    }
+  },
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "tab",
+      "title": "B",
+      "body": "\nb"
+    }
+  }
+]

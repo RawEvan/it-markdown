@@ -1,0 +1,21 @@
+[
+  {
+    "type": "markdown",
+    "value": "# Demo\n\n"
+  },
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "button",
+      "label": "Go",
+      "onClickRaw": "alert(1)",
+      "attrs": {
+        "onclick": "alert(1)"
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  }
+]
