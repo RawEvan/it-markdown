@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>it-md-notepad</title>
+    <style>
+      :root {
+        --accent: #6366f1;
+        --accent-hover: #4f46e5;
+        --bg: #f8fafc;
+        --surface: #ffffff;
+        --text: #1e293b;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --radius: 8px;
+        --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      /* Top toolbar */
+      .toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        flex-shrink: 0;
+      }
+
+      .toolbar-left {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .toolbar-status {
+        font-size: 0.75rem;
+        color: var(--accent);
+      }
+
+      .toolbar-right {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      /* View mode toggle */
+      .view-toggle {
+        display: flex;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        overflow: hidden;
+      }
+
+      .view-toggle button {
+        padding: 0.35rem 0.75rem;
+        border: none;
+        background: transparent;
+        color: var(--muted);
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+
+      .view-toggle button:hover {
+        color: var(--text);
+      }
+
+      .view-toggle button.active {
+        background: var(--accent);
+        color: white;
+      }
+
+      /* Icon buttons */
+      .icon-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        border: none;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        border-radius: 4px;
+        transition: all 0.15s;
+      }
+
+      .icon-btn:hover {
+        color: var(--text);
+        background: var(--bg);
+      }
+
+      .icon-btn svg {
+        width: 1rem;
+        height: 1rem;
+      }
+
+      /* Main content area */
+      .main {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 0fr 1fr;
+        overflow: hidden;
+        transition: grid-template-columns 0.2s ease;
+      }
+
+      .main.mode-preview {
+        grid-template-columns: 0fr 1fr;
+      }
+
+      .main.mode-edit {
+        grid-template-columns: 1fr 0fr;
+      }
+
+      .main.mode-split {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      /* Editor panel */
+      .editor-panel {
+        display: flex;
+        flex-direction: column;
+        background: var(--surface);
+        border-right: 1px solid var(--border);
+        overflow: hidden;
+        min-width: 0;
+      }
+
+      .editor-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.4rem 1rem;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        flex-shrink: 0;
+      }
+
+      .editor-header .save-btn {
+        padding: 0.2rem 0.6rem;
+        border: 1px solid var(--accent);
+        border-radius: 4px;
+        background: var(--accent);
+        color: white;
+        font-size: 0.7rem;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+
+      .editor-header .save-btn:hover {
+        background: var(--accent-hover);
+      }
+
+      textarea {
+        flex: 1;
+        border: none;
+        padding: 1rem;
+        font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        resize: none;
+        outline: none;
+        background: var(--surface);
+        color: var(--text);
+        min-width: 0;
+      }
+
+      /* Preview panel */
+      .preview-panel {
+        display: flex;
+        flex-direction: column;
+        background: var(--bg);
+        overflow: hidden;
+        min-width: 0;
+      }
+
+      #preview {
+        flex: 1;
+        padding: 1.5rem;
+        overflow: auto;
+        min-width: 0;
+      }
+
+      /* Preview content styles */
+      #preview .imd-root {
+        max-width: 800px;
+        margin: 0 auto;
+        background: var(--surface);
+        padding: 2rem;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+      }
+
+      #preview h1 {
+        font-size: 1.75rem;
+        margin-bottom: 0.75rem;
+      }
+
+      #preview h2 {
+        font-size: 1.25rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+        color: var(--accent);
+      }
+
+      #preview h3 {
+        font-size: 1.1rem;
+        margin-top: 1.25rem;
+        margin-bottom: 0.5rem;
+      }
+
+      #preview p {
+        margin-bottom: 0.75rem;
+        line-height: 1.6;
+      }
+
+      #preview hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 1.5rem 0;
+      }
+
+      #preview pre {
+        background: #1e293b;
+        color: #e2e8f0;
+        padding: 1rem;
+        border-radius: var(--radius);
+        overflow-x: auto;
+        margin-bottom: 1rem;
+        font-size: 0.85rem;
+      }
+
+      #preview code {
+        font-family: 'SF Mono', 'Fira Code', monospace;
+        font-size: 0.9em;
+      }
+
+      #preview p code {
+        background: #f1f5f9;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: var(--accent);
+      }
+
+      #preview ul {
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
+      }
+
+      /* Widget styles */
+      .imd-button {
+        display: inline-block;
+        padding: 0.6rem 1.5rem;
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: var(--radius);
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.15s, transform 0.1s;
+      }
+
+      .imd-button:hover {
+        background: var(--accent-hover);
+        transform: translateY(-1px);
+      }
+
+      .imd-slider {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .imd-slider-label {
+        font-weight: 600;
+        min-width: 100px;
+      }
+
+      .imd-slider input[type=range] {
+        flex: 1;
+        accent-color: var(--accent);
+      }
+
+      .imd-slider-value-display {
+        min-width: 3ch;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        font-weight: 600;
+        color: var(--accent);
+      }
+
+      fieldset.imd-radio,
+      fieldset.imd-checkbox {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1rem 1.25rem;
+        margin-bottom: 0.75rem;
+      }
+
+      fieldset legend {
+        font-weight: 600;
+        padding: 0 0.5rem;
+      }
+
+      .imd-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+      }
+
+      .imd-option {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        cursor: pointer;
+        padding: 0.3rem 0.6rem;
+        border-radius: 4px;
+        transition: background 0.15s;
+      }
+
+      .imd-option:hover {
+        background: #f1f5f9;
+      }
+
+      .imd-option input {
+        accent-color: var(--accent);
+      }
+
+      .imd-tabs {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        margin-bottom: 1rem;
+      }
+
+      .imd-tablist {
+        display: flex;
+        background: #f8fafc;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .imd-tab {
+        padding: 0.6rem 1.25rem;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 0.95rem;
+        color: var(--muted);
+        border-bottom: 2px solid transparent;
+        transition: all 0.15s;
+      }
+
+      .imd-tab[aria-selected=true] {
+        color: var(--accent);
+        border-bottom-color: var(--accent);
+        font-weight: 600;
+      }
+
+      .imd-tab:hover {
+        color: var(--text);
+      }
+
+      .imd-tab-panel {
+        padding: 1rem 1.25rem;
+      }
+
+      .imd-tab-panel[hidden] {
+        display: none;
+      }
+
+      .imd-collapse {
+        margin-bottom: 1rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+      }
+
+      .imd-collapse summary {
+        padding: 0.75rem 1.25rem;
+        cursor: pointer;
+        font-weight: 600;
+        background: #f8fafc;
+        transition: background 0.15s;
+      }
+
+      .imd-collapse summary:hover {
+        background: #f1f5f9;
+      }
+
+      .imd-collapse > :not(summary) {
+        padding: 0 1.25rem;
+      }
+
+      /* Scrollbar styling */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <span id="status" class="toolbar-status"></span>
+      </div>
+      <div class="toolbar-right">
+        <div class="view-toggle">
+          <button id="view-preview" class="active" title="Preview">Preview</button>
+          <button id="view-split" title="Split">Split</button>
+          <button id="view-edit" title="Edit">Edit</button>
+        </div>
+        <button id="btn-open" class="icon-btn" title="Open file">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        </button>
+        <button id="btn-save-as" class="icon-btn" title="Save As...">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="main mode-preview" id="main">
+      <div class="editor-panel">
+        <div class="editor-header">
+          <span>Markdown Source</span>
+          <button id="btn-save" class="save-btn">Save</button>
+        </div>
+        <textarea id="src" spellcheck="false"></textarea>
+      </div>
+      <div class="preview-panel">
+        <div id="preview"></div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

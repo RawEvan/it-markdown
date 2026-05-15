@@ -1,0 +1,20 @@
+{
+  "name": "it-md-notepad",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "it-md-notepad": "./bin/it-md-notepad.mjs"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "node bin/it-md-notepad.mjs"
+  },
+  "dependencies": {
+    "it-markdown": "file:.."
+  },
+  "devDependencies": {
+    "vite": "^6.3.5"
+  }
+}

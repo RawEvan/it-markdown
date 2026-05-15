@@ -1,0 +1,19 @@
+[package]
+name = "md-notepad"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+eframe = "0.32"
+egui = "0.32"
+pulldown-cmark = { version = "0.13", features = ["html"] }
+log = "0.4"
+env_logger = "0.11"
+rfd = "0.15"
+serde = { version = "1.0", features = ["derive"] }
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+strip = true
