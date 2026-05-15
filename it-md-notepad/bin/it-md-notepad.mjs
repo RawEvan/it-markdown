@@ -15,6 +15,7 @@
 import { createServer } from "vite";
 import path from "node:path";
 import fs from "node:fs/promises";
+import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -53,6 +54,16 @@ Examples:
 `);
 }
 
+// Check if it-markdown is built
+function checkDependencies() {
+  const distPath = path.resolve(rootDir, "..", "dist", "index.js");
+  if (!existsSync(distPath)) {
+    console.error("❌ it-markdown module not found. Please run 'npm run build' first.");
+    return false;
+  }
+  return true;
+}
+
 async function resolveFilePath(inputPath) {
   if (!inputPath) return null;
   if (path.isAbsolute(inputPath)) return inputPath;
@@ -60,6 +71,8 @@ async function resolveFilePath(inputPath) {
 }
 
 async function startServer(args) {
+  console.log("🚀 Starting it-md-notepad...\n");
+
   const server = await createServer({
     root: rootDir,
     server: {
@@ -136,12 +149,20 @@ async function startServer(args) {
   const port = typeof addr === "object" ? addr?.port : addr;
   const url = `http://localhost:${port}`;
 
-  console.log(`\n  it-md-notepad running at ${url}\n`);
+  console.log(`✅ it-md-notepad is running at ${url}\n`);
 
   if (args.file) {
     const fileUrl = `${url}?file=${encodeURIComponent(args.file)}`;
-    console.log(`  Open file: ${fileUrl}\n`);
+    console.log(`📄 Open file: ${fileUrl}\n`);
   }
+
+  // Handle graceful shutdown
+  process.on("SIGINT", () => {
+    console.log("\n🔴 Stopping server...");
+    server.close().then(() => {
+      process.exit(0);
+    });
+  });
 }
 
 const args = parseArgs(process.argv);
@@ -151,7 +172,11 @@ if (args.help) {
   process.exit(0);
 }
 
+if (!checkDependencies()) {
+  process.exit(1);
+}
+
 startServer(args).catch((err) => {
-  console.error("Failed to start server:", err);
+  console.error("❌ Failed to start server:", err.message);
   process.exit(1);
 });
