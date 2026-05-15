@@ -20,17 +20,21 @@
     "README.zh-CN.md",
     "fixtures",
     "schemas",
-    "docs"
+    "docs",
+    "skills",
+    "it-md-notepad"
   ],
   "bin": {
-    "it-markdown": "./dist/cli.js"
+    "it-markdown": "./dist/cli.js",
+    "it-md-notepad": "./it-md-notepad/bin/it-md-notepad.mjs"
   },
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
     "test:watch": "vitest",
     "gen-fixtures": "npm run build && node scripts/gen-fixtures.mjs",
-    "seed-fixtures": "node scripts/seed-bulk-fixtures.mjs"
+    "seed-fixtures": "node scripts/seed-bulk-fixtures.mjs",
+    "postinstall": "cd it-md-notepad && npm install"
   },
   "keywords": [
     "markdown",
