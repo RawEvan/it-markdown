@@ -159,6 +159,7 @@ function renderWidget(w: ImdWidget, opts: RenderHtmlOptions): string {
 
 function renderSegments(segments: ImdSegment[], opts: RenderHtmlOptions): string {
   const parts: string[] = [];
+  const groupTabs = opts.groupTabs !== false;
   let i = 0;
   while (i < segments.length) {
     const seg = segments[i];
@@ -168,7 +169,7 @@ function renderSegments(segments: ImdSegment[], opts: RenderHtmlOptions): string
       i++;
       continue;
     }
-    if (isTabWidget(seg)) {
+    if (isTabWidget(seg) && groupTabs) {
       const tabs: Extract<ImdWidget, { kind: "tab" }>[] = [];
       while (isTabWidget(segments[i])) {
         const t = segments[i];

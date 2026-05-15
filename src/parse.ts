@@ -27,7 +27,7 @@ function buildWidgetFromLink(label: string, dest: string): ImdWidget | null {
         kind: "button",
         label,
         id,
-        onClickRaw: attrs.onclick,
+        onClickRaw: attrs.onclick || attrs.action,
         attrs,
       };
     case "slider":
