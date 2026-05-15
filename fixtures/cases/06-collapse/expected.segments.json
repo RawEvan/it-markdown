@@ -1,0 +1,10 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "collapse",
+      "title": "More",
+      "body": "Hidden **body**"
+    }
+  }
+]

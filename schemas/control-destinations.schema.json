@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/RawEvan/it-markdown/schemas/control-destinations.schema.json",
+  "title": "it-markdown link-style control destination",
+  "description": "Grammar for Markdown inline link destinations that start with ! (extension layer). Not a separate URL scheme; opaque to generic CommonMark parsers.",
+  "type": "string",
+  "pattern": "^!(button|slider|radio|checkbox):",
+  "definitions": {
+    "buttonAttrs": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "properties": {
+        "id": { "type": "string" },
+        "onclick": { "type": "string" },
+        "onClick": { "type": "string" }
+      }
+    },
+    "sliderAttrs": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "properties": {
+        "id": { "type": "string" },
+        "min": { "type": "string" },
+        "max": { "type": "string" },
+        "value": { "type": "string" }
+      }
+    },
+    "optionsAttrs": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "properties": {
+        "id": { "type": "string" },
+        "options": { "type": "string", "description": "Pipe-separated labels" }
+      },
+      "required": ["options"]
+    }
+  }
+}

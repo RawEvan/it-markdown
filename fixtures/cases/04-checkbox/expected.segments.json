@@ -1,0 +1,22 @@
+[
+  {
+    "type": "widget",
+    "widget": {
+      "kind": "checkbox",
+      "label": "Opts",
+      "id": "c1",
+      "options": [
+        "X",
+        "Y"
+      ],
+      "attrs": {
+        "options": "X|Y",
+        "id": "c1"
+      }
+    }
+  },
+  {
+    "type": "markdown",
+    "value": "\n"
+  }
+]
