@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>iMD — Interactive Markdown Demo</title>
+<style>
+  :root {
+    --accent: #6366f1;
+    --accent-hover: #4f46e5;
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --radius: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg); color: var(--text);
+    line-height: 1.6; padding: 2rem; max-width: 800px; margin: 0 auto;
+  }
+  .imd-root h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+  .imd-root h2 { font-size: 1.3rem; margin-top: 2rem; margin-bottom: 0.75rem; color: var(--accent); }
+  .imd-root p { margin-bottom: 0.75rem; }
+  .imd-root hr { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+  .imd-root pre { background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: var(--radius); overflow-x: auto; margin-bottom: 1rem; }
+  .imd-root code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.9em; }
+  .imd-root p code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; }
+  .imd-root ul { padding-left: 1.5rem; margin-bottom: 0.75rem; }
+
+  .imd-button {
+    display: inline-block; padding: 0.6rem 1.5rem;
+    background: var(--accent); color: white; border: none;
+    border-radius: var(--radius); font-size: 1rem; cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .imd-button:hover { background: var(--accent-hover); transform: translateY(-1px); }
+  .imd-button:active { transform: translateY(0); }
+
+  .imd-slider {
+    display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;
+  }
+  .imd-slider-label { font-weight: 600; min-width: 100px; }
+  .imd-slider input[type=range] {
+    flex: 1; accent-color: var(--accent); height: 6px;
+  }
+  .imd-slider-value-display {
+    min-width: 3ch; text-align: right; font-variant-numeric: tabular-nums;
+    font-weight: 600; color: var(--accent);
+  }
+
+  fieldset.imd-radio, fieldset.imd-checkbox {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 1rem 1.25rem; margin-bottom: 0.75rem;
+  }
+  fieldset legend { font-weight: 600; padding: 0 0.5rem; }
+  .imd-options { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
+  .imd-option {
+    display: flex; align-items: center; gap: 0.35rem; cursor: pointer;
+    padding: 0.3rem 0.6rem; border-radius: 4px; transition: background 0.15s;
+  }
+  .imd-option:hover { background: #f1f5f9; }
+  .imd-option input { accent-color: var(--accent); }
+
+  .imd-tabs {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden; margin-bottom: 1rem;
+  }
+  .imd-tablist {
+    display: flex; background: #f8fafc; border-bottom: 1px solid var(--border);
+  }
+  .imd-tab {
+    padding: 0.6rem 1.25rem; border: none; background: transparent;
+    cursor: pointer; font-size: 0.95rem; color: var(--muted);
+    border-bottom: 2px solid transparent; transition: all 0.15s;
+  }
+  .imd-tab[aria-selected=true] { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+  .imd-tab:hover { color: var(--text); }
+  .imd-tab-panel { padding: 1rem 1.25rem; }
+  .imd-tab-panel[hidden] { display: none; }
+
+  .imd-collapse { margin-bottom: 1rem; border: 1px solid var(--border); border-radius: var(--radius); }
+  .imd-collapse summary {
+    padding: 0.75rem 1.25rem; cursor: pointer; font-weight: 600;
+    background: #f8fafc; transition: background 0.15s;
+  }
+  .imd-collapse summary:hover { background: #f1f5f9; }
+  .imd-collapse > :not(summary) { padding: 0 1.25rem; }
+  .imd-collapse p, .imd-collapse ul { margin-top: 0.5rem; }
+
+  .source-toggle {
+    position: fixed; top: 1rem; right: 1rem;
+    padding: 0.4rem 1rem; border-radius: var(--radius);
+    border: 1px solid var(--border); background: var(--surface);
+    cursor: pointer; font-size: 0.85rem; color: var(--muted);
+    transition: all 0.15s;
+  }
+  .source-toggle:hover { border-color: var(--accent); color: var(--accent); }
+  #source-panel {
+    display: none; position: fixed; top: 3.5rem; right: 1rem;
+    width: 400px; max-height: 80vh; overflow: auto;
+    background: #1e293b; color: #e2e8f0; padding: 1rem;
+    border-radius: var(--radius); font-family: monospace;
+    font-size: 0.8rem; white-space: pre-wrap; line-height: 1.5;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2); z-index: 100;
+  }
+  #source-panel.visible { display: block; }
+</style>
+</head>
+<body>
+<button class="source-toggle" onclick="document.getElementById('source-panel').classList.toggle('visible')">View Source</button>
+<div id="source-panel"></div>
+
+<article class="imd-root" data-imd="1"><h1>Interactive Markdown Demo</h1>
+<p>Welcome to <strong>it-markdown (iMD)</strong> — Markdown-first authoring with interactive extensions.</p>
+<hr>
+<h2>Button</h2>
+
+<button type="button" class="imd-button" id="demo-btn" data-imd-control="button" data-imd-onclick="alert(&quot;Hello from iMD!&quot;)">Click Me</button>
+<h2>Slider</h2>
+
+<label class="imd-slider" for="brightness" data-imd-control="slider"><span class="imd-slider-label">Brightness</span> <input type="range" id="brightness" name="brightness" min="0" max="100" value="70" /></label>
+<h2>Radio Group</h2>
+
+<fieldset class="imd-radio" data-imd-control="radio" data-imd-id="lang"><legend>Pick a language</legend><div class="imd-options"><label class="imd-option"><input type="radio" name="lang" value="TypeScript" id="lang-0" /> TypeScript</label> <label class="imd-option"><input type="radio" name="lang" value="Python" id="lang-1" /> Python</label> <label class="imd-option"><input type="radio" name="lang" value="Rust" id="lang-2" /> Rust</label> <label class="imd-option"><input type="radio" name="lang" value="Go" id="lang-3" /> Go</label></div></fieldset>
+<h2>Checkbox Group</h2>
+
+<fieldset class="imd-checkbox" data-imd-control="checkbox" data-imd-id="skills"><legend>Select skills</legend><div class="imd-options"><label class="imd-option"><input type="checkbox" name="skills[]" value="HTML" id="skills-0" /> HTML</label> <label class="imd-option"><input type="checkbox" name="skills[]" value="CSS" id="skills-1" /> CSS</label> <label class="imd-option"><input type="checkbox" name="skills[]" value="JavaScript" id="skills-2" /> JavaScript</label> <label class="imd-option"><input type="checkbox" name="skills[]" value="Node.js" id="skills-3" /> Node.js</label></div></fieldset>
+<h2>Tabs</h2>
+
+<div class="imd-tabs" data-imd-control="tabs" id="imd-tabs-iosn21"><div class="imd-tablist" role="tablist"><button type="button" class="imd-tab" role="tab" aria-selected="true" data-imd-tab-index="0" id="imd-tabs-iosn21-tab-0">Overview</button><button type="button" class="imd-tab" role="tab" aria-selected="false" data-imd-tab-index="1" id="imd-tabs-iosn21-tab-1">Usage</button><button type="button" class="imd-tab" role="tab" aria-selected="false" data-imd-tab-index="2" id="imd-tabs-iosn21-tab-2">Spec</button></div><div class="imd-tab-panel" role="tabpanel" aria-labelledby="imd-tabs-iosn21-tab-0"><p>This is the <strong>Overview</strong> tab. iMD extends standard CommonMark with a small set of interactive widgets.</p>
+</div><div class="imd-tab-panel" role="tabpanel" hidden aria-labelledby="imd-tabs-iosn21-tab-1"><p>Install with npm:</p>
+<pre><code class="language-bash">npm install it-markdown
+</code></pre>
+<p>Then import and render:</p>
+<pre><code class="language-ts">import { renderImdToHtml } from &quot;it-markdown&quot;;
+const html = renderImdToHtml(source);
+</code></pre>
+</div><div class="imd-tab-panel" role="tabpanel" hidden aria-labelledby="imd-tabs-iosn21-tab-2"><p>See <strong>SPEC.md</strong> for the full iMD grammar specification. Widgets use the link-style syntax: <code>[label](!type:key=val)</code></p>
+<h2>Collapsible Section</h2>
+</div></div>
+<details class="imd-collapse" data-imd-control="collapse"><summary>Click to reveal details</summary><p>This content is hidden by default. It supports full <strong>Markdown</strong> including:</p>
+<ul>
+<li>Bullet lists</li>
+<li><code>Inline code</code></li>
+<li><em>Emphasis</em> and <strong>strong</strong></li>
+</ul>
+<hr>
+<p><em>Rendered by it-markdown v0.1.0</em></p>
+</details></article>
+
+<script>
+// Tab switching
+document.querySelectorAll('.imd-tabs').forEach(tabGroup => {
+  const tabs = tabGroup.querySelectorAll('.imd-tab');
+  const panels = tabGroup.querySelectorAll('.imd-tab-panel');
+  tabs.forEach((tab, idx) => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
+      panels.forEach(p => p.hidden = true);
+      tab.setAttribute('aria-selected', 'true');
+      if (panels[idx]) panels[idx].hidden = false;
+    });
+  });
+});
+
+// Button click handlers
+document.querySelectorAll('.imd-button[data-imd-onclick]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    try { new Function(btn.dataset.imdOnclick)(); } catch(e) { console.error(e); }
+  });
+});
+
+// Slider value display
+document.querySelectorAll('.imd-slider input[type=range]').forEach(input => {
+  const display = document.createElement('span');
+  display.className = 'imd-slider-value-display';
+  display.textContent = input.value;
+  input.parentElement.appendChild(display);
+  input.addEventListener('input', () => { display.textContent = input.value; });
+});
+
+// Source panel
+const srcEl = document.getElementById('source-panel');
+srcEl.textContent = "# Interactive Markdown Demo\n\nWelcome to **it-markdown (iMD)** — Markdown-first authoring with interactive extensions.\n\n---\n\n## Button\n\n[Click Me](!button:id=demo-btn,onClick=alert(\"Hello from iMD!\"))\n\n## Slider\n\n[Brightness](!slider:min=0,max=100,value=70,id=brightness)\n\n## Radio Group\n\n[Pick a language](!radio:options=TypeScript|Python|Rust|Go,id=lang)\n\n## Checkbox Group\n\n[Select skills](!checkbox:options=HTML|CSS|JavaScript|Node.js,id=skills)\n\n## Tabs\n\n[!tab:Overview]\nThis is the **Overview** tab. iMD extends standard CommonMark with a small set of interactive widgets.\n\n[!tab:Usage]\nInstall with npm:\n\n```bash\nnpm install it-markdown\n```\n\nThen import and render:\n\n```ts\nimport { renderImdToHtml } from \"it-markdown\";\nconst html = renderImdToHtml(source);\n```\n\n[!tab:Spec]\nSee **SPEC.md** for the full iMD grammar specification. Widgets use the link-style syntax: `[label](!type:key=val)`\n\n## Collapsible Section\n\n[!collapse:Click to reveal details]\nThis content is hidden by default. It supports full **Markdown** including:\n\n- Bullet lists\n- `Inline code`\n- *Emphasis* and **strong**\n\n---\n\n*Rendered by it-markdown v0.1.0*\n";
+</script>
+</body>
+</html>
